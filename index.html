@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-2-10 Breathing</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #container {
+            position: relative;
+            width: 90vmin;
+            height: 90vmin;
+            max-width: 90vw;
+            max-height: 90vw;
+        }
+        .circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: #1e1e1e;
+            box-shadow: 0 0 20px #ffffff55, 0 0 40px #ffffff33;
+            font-size: 10vmin;
+            font-weight: bold;
+            text-align: center;
+        }
+        #instruction {
+            width: 90vmin;
+            height: 90vmin;
+            max-width: 90vw;
+            max-height: 90vw;
+            font-size: 100%;
+        }
+        #animation {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="circle" id="instruction"></div>
+        <div class="circle" id="animation" style="width: 0; height: 0;"></div>
+    </div>
+
+
+    <script>
+        const states = [
+            { duration: 3, text: "Breathe in through your nose" },
+            { duration: 2, text: "Hold your breath" },
+            { duration: 10, text: "Slowly exhale through your mouth" },
+        ];
+
+        let currentState = 0;
+        let instruction = states[currentState].duration;
+        let startTime = null;
+
+        const instructionElement = document.getElementById('instruction');
+
+        const animationElement = document.getElementById('animation');
+
+        function updateUI(progress) {
+            instructionElement.textContent = states[currentState].text;
+
+            const newSize = progress / states[currentState].duration * 90;
+            animationElement.style.width = `${newSize}vmin`;
+            animationElement.style.height = `${newSize}vmin`;
+        }
+
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp; 
+            const elapsed = (timestamp - startTime) / 1000; 
+
+            if (elapsed < states[currentState].duration) {
+                // Update UI based on elapsed time
+                updateUI(elapsed);
+                requestAnimationFrame(animate);
+            } else {
+                // Transition to the next state
+                currentState = (currentState + 1) % states.length;
+                countdown = states[currentState].duration;
+                startTime = null;
+                requestAnimationFrame(animate); 
+            }
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
