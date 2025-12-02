@@ -46,6 +46,7 @@
             max-width: 90vw;
             max-height: 90vw;
             font-size: 100%;
+            cursor: pointer;
         }
         #animation {
             background: rgba(255, 255, 255, 0.1);
@@ -54,10 +55,9 @@
 </head>
 <body>
     <div id="container">
-        <div class="circle" id="instruction"></div>
+        <div class="circle" id="instruction">Click to start</div>
         <div class="circle" id="animation" style="width: 0; height: 0;"></div>
     </div>
-
 
     <script>
         const states = [
@@ -67,12 +67,16 @@
         ];
 
         let currentState = 0;
-        let instruction = states[currentState].duration;
         let startTime = null;
 
         const instructionElement = document.getElementById('instruction');
 
         const animationElement = document.getElementById('animation');
+
+        instructionElement.addEventListener("click", () => {
+            instructionElement.style.cursor = 'auto';
+            requestAnimationFrame(animate);
+        }, {once: true});
 
         function updateUI(progress) {
             instructionElement.textContent = states[currentState].text;
@@ -99,7 +103,6 @@
             }
         }
 
-        requestAnimationFrame(animate);
     </script>
 </body>
 </html>
